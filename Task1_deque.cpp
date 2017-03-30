@@ -108,6 +108,8 @@ void doMenuActions()
 
 int main()
 {
+	setlocale(LC_ALL, "Russian");
+	doMenuActions();
     return 0;
 }
 
