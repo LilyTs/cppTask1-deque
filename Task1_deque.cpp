@@ -35,6 +35,11 @@ std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) 
 	return f;
 }
 
+//Заполнение контейнера случайными числами из диапазона [-M, M]
+std::deque<int>& fillDequeWithRandNumbers(std::deque<int> &d, int N, int M) {
+	std::generate(d.begin(), d.end(), randNumber(M));
+}
+
 int menuItem()
 {
 	std::cout << "Выберите действие:\n";
