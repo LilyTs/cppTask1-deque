@@ -19,6 +19,12 @@
 
 #include "stdafx.h"
 
+//Генератор случайного целого числа из диапазона [-M, M]
+int randNumber(int M) {
+	srand(time(NULL));
+	return rand() % (2 * M) + (-M);
+}
+
 int menuItem()
 {
 	std::cout << "Выберите действие:\n";
