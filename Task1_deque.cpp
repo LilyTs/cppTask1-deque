@@ -44,7 +44,7 @@ std::deque<int>& fillDequeWithRandNumbers(std::deque<int> &d, int N, int M) {
 std::fstream& fillFileWithRandNumbers_std(std::string fileName, std::deque<int> d) {
 	std::fstream f(fileName);
 	for (std::deque<int>::iterator it = d.begin(); it != d.end(); ++it)
-		f >> *it >> " ";
+		f << *it << " ";
 	f.close();
 	return f;
 }
@@ -80,27 +80,28 @@ void doMenuActions()
 	while ((item = menuItem()) != 0)
 	{
 		std::string fileName;
-		std::deque<int> d();
+		int N, M;
+		std::cout << "Введите имя файла: ";
+		std::cin >> fileName;
+		std::cout << "\nВведите количество чисел: ";
+		std::cin >> N;
+		std::deque<int> d(N);
 		switch (item)
 		{
 		case 1:
-			int N, M;
-			std::cout << "Введите имя файла: ";
-			std::cin >> fileName;
-			std::cout << "\nВведите количество чисел: ";
-			std::cin >> N;
 			std::cout << "\nВведите М: ";
 			std::cin >> M;
-			fillFileWithRandNumbers_cycle(fileName, N, M);
+			fillFileWithRandNumbers_std(fileName, d);
+			//fillFileWithRandNumbers_cycle(fileName, N, M);
 			break;
 		case 2:
-			fillFileWithRandNumbers_std(fileName, d);
+			//fillFileWithRandNumbers_std(fileName, d);
 			break;
 		case 3:
 		{
 			std::cout << "Введите имя файла: ";
 			std::cin >> fileName;
-			fillDeque(f, d);
+			//fillDeque(f, d);
 			break;
 		}
 		case 4:
