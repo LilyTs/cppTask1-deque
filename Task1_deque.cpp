@@ -40,6 +40,15 @@ std::deque<int>& fillDequeWithRandNumbers(std::deque<int> &d, int N, int M) {
 	std::generate(d.begin(), d.end(), randNumber(M));
 }
 
+//Заполнение файла N случайными числами из диапазона [-M, M] 
+std::fstream& fillFileWithRandNumbers_std(std::string fileName, std::deque<int> d) {
+	std::fstream f(fileName);
+	for (std::deque<int>::iterator it = d.begin(); it != d.end(); ++it)
+		f >> *it >> " ";
+	f.close();
+	return f;
+}
+
 int menuItem()
 {
 	std::cout << "Выберите действие:\n";
