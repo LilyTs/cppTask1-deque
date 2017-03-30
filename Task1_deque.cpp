@@ -25,6 +25,16 @@ int randNumber(int M) {
 	return rand() % (2 * M) + (-M);
 }
 
+//Заполнение файла N случайными числами из диапазона [-M, M] (в цикле)
+std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) {
+	std::fstream f(fileName);
+	srand(time(NULL));
+	for (int i = 0; i < N; ++i)
+		f << randNumber(M) << "\n";
+	f.close();
+	return f;
+}
+
 int menuItem()
 {
 	std::cout << "Выберите действие:\n";
