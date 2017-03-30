@@ -60,6 +60,52 @@ int menuItem()
 	return item;
 }
 
+void doMenuActions()
+{
+	int item;
+	while ((item = menuItem()) != 0)
+	{
+		std::string fileName;
+		std::deque<int> d();
+		switch (item)
+		{
+		case 1:
+			int N, M;
+			std::cout << "Введите имя файла: ";
+			std::cin >> fileName;
+			std::cout << "\nВведите количество чисел: ";
+			std::cin >> N;
+			std::cout << "\nВведите М: ";
+			std::cin >> M;
+			fillFileWithRandNumbers_cycle(fileName, N, M);
+			break;
+		case 2:
+			fillFileWithRandNumbers_std(fileName, d);
+			break;
+		case 3:
+		{
+			std::cout << "Введите имя файла: ";
+			std::cin >> fileName;
+			fillDeque(f, d);
+			break;
+		}
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			break;
+		case 9:
+			break;
+		}
+	}
+}
+
+
 int main()
 {
     return 0;
