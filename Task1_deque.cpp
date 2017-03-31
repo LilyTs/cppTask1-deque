@@ -20,24 +20,23 @@
 #include "stdafx.h"
 
 //Генератор случайного целого числа из диапазона [-M, M]
-int randNumber(int M) {
-	srand(time(NULL));
+int rand(int M) {
+	//srand(time(NULL));
 	return rand() % (2 * M) + (-M);
 }
 
 //Заполнение файла N случайными числами из диапазона [-M, M] (в цикле)
 std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) {
 	std::fstream f(fileName);
-	srand(time(NULL));
 	for (int i = 0; i < N; ++i)
-		f << randNumber(M) << "\n";
+		f << rand(M) << "\n";
 	f.close();
 	return f;
 }
 
 //Заполнение контейнера случайными числами из диапазона [-M, M]
 std::deque<int>& fillDequeWithRandNumbers(std::deque<int> &d, int N, int M) {
-	//std::generate(d.begin(), d.end(), randNumber(M));
+	//std::generate(d.begin(), d.end(), rand(M));
 	return d;
 }
 
@@ -45,7 +44,7 @@ std::deque<int>& fillDequeWithRandNumbers(std::deque<int> &d, int N, int M) {
 std::fstream& fillFileWithRandNumbers_std(std::string fileName, std::deque<int> d) {
 	std::fstream f(fileName);
 	for (std::deque<int>::iterator it = d.begin(); it != d.end(); ++it)
-		f << *it << " ";
+		f << *it << "\n";
 	f.close();
 	return f;
 }
@@ -87,16 +86,16 @@ void doMenuActions()
 		std::cout << "\nВведите количество чисел: ";
 		std::cin >> N;
 		std::deque<int> d(N);
+		std::cout << "\nВведите М: ";
+		std::cin >> M;
+		fillDequeWithRandNumbers(d, N, M);
 		switch (item)
 		{
 		case 1:
-			std::cout << "\nВведите М: ";
-			std::cin >> M;
-			fillFileWithRandNumbers_std(fileName, d);
-			//fillFileWithRandNumbers_cycle(fileName, N, M);
+			fillFileWithRandNumbers_cycle(fileName, N, M);
 			break;
 		case 2:
-			//fillFileWithRandNumbers_std(fileName, d);
+			fillFileWithRandNumbers_std(fileName, d);
 			break;
 		case 3:
 		{
