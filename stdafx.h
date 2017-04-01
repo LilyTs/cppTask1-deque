@@ -16,6 +16,8 @@
 #include <algorithm>
 #include <fstream>
 
+typedef std::deque<int> myContainer;
+typedef myContainer::iterator cIterator;
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

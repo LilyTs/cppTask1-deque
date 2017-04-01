@@ -21,8 +21,8 @@
 
 //Генератор случайного целого числа из диапазона [-M, M]
 int rand(int M) {
-	//srand(time(NULL));
-	return rand() % (2 * M) + (-M);
+	//srand(time(nullptr));
+	return std::rand() % (2 * M) + (-M);
 }
 
 //Заполнение файла N случайными числами из диапазона [-M, M] (в цикле)
@@ -35,18 +35,23 @@ std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) 
 }
 
 //Заполнение контейнера случайными числами из диапазона [-M, M]
-std::deque<int>& fillDequeWithRandNumbers(std::deque<int> &d, int N, int M) {
-	//std::generate(d.begin(), d.end(), rand(M));
-	return d;
+myContainer& fillDequeWithRandNumbers(myContainer &c, int N, int M) {
+	std::generate(c.begin(), c.end(), rand(M));
+	return c;
 }
 
 //Заполнение файла N случайными числами из диапазона [-M, M] 
-std::fstream& fillFileWithRandNumbers_std(std::string fileName, std::deque<int> d) {
+std::fstream& fillFileWithRandNumbers_std(std::string fileName, myContainer c) {
 	std::fstream f(fileName);
-	for (std::deque<int>::iterator it = d.begin(); it != d.end(); ++it)
+	for (cIterator it = c.begin(); it != c.end(); ++it)
 		f << *it << "\n";
 	f.close();
 	return f;
+}
+
+//Заполнение контейнера числами из файла
+std::deque<int>& fillContainerFromFile(std::ifstream& f) {
+
 }
 
 int menuItem()
@@ -85,23 +90,23 @@ void doMenuActions()
 		std::cin >> fileName;
 		std::cout << "\nВведите количество чисел: ";
 		std::cin >> N;
-		std::deque<int> d(N);
-		std::cout << "\nВведите М: ";
+		myContainer c(N);
+		std::cout << "\nВведите границу диапазона M: ";
 		std::cin >> M;
-		fillDequeWithRandNumbers(d, N, M);
+		fillDequeWithRandNumbers(c, N, M);
 		switch (item)
 		{
 		case 1:
 			fillFileWithRandNumbers_cycle(fileName, N, M);
 			break;
 		case 2:
-			fillFileWithRandNumbers_std(fileName, d);
+			fillFileWithRandNumbers_std(fileName, c);
 			break;
 		case 3:
 		{
 			std::cout << "Введите имя файла: ";
 			std::cin >> fileName;
-			//fillDeque(f, d);
+			//fillDeque(f, c);
 			break;
 		}
 		case 4:
