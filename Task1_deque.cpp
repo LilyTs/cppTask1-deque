@@ -36,7 +36,7 @@ std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) 
 
 //«аполнение контейнера случайными числами из диапазона [-M, M]
 container& fillContainerWithRandNumbers(container &c, int N, int M) {
-	std::generate(c.begin(), c.end(), rand(M));
+	std::generate(c.begin(), c.end(), [&]() {return rand(M); });
 	return c;
 }
 
@@ -52,25 +52,27 @@ std::fstream& fillFileFromContainer(std::string fileName, container &c) {
 //«аполнение контейнера значени€ми из файла
 container& fillContainerFromFile(std::ifstream &f) {
 	c.clear();
-	if(f.is_open) {
+	if(f.is_open()) {
 		while (!f.eof()) {
 			std::string s;
 			std::getline(f, s);
 			c.push_back(stoi(s));
 		}
 	}
+	return c;
 		//reinterpret_cast<value_type>(s)
 }
 container& fillContainerFromFile(std::string fileName) {
 	c.clear();
 	std::fstream f(fileName, std::ios_base::in);
-	if (f.is_open) {
+	if (f.is_open()) {
 		while (!f.eof()) {
 			std::string s;
 			std::getline(f, s);
 			c.push_back(stoi(s));
 		}
 	}
+	return c;
 	//reinterpret_cast<value_type>(s)
 }
 
@@ -79,15 +81,6 @@ void outputContainer(container &c) {
 	for (cIterator it = c.begin(); it != c.end(); ++it) {
 		std::cout << *it << " ";
 	}
-}
-
-//ѕреобразование контейнера (15. ƒобавить к каждому числу полусумму минимального и максимального по абсолютной величине числа.)
-container& modify(container &c) {
-	std::pair<value_type, value_type> mM = minAndMax(c);
-	for (cIterator it = c.begin(); it != c.end(); ++it) {
-		*it += (mM.first + mM.second) / 2;
-	}
-	return c;
 }
 
 value_type min(container c) {
@@ -122,6 +115,15 @@ std::pair<value_type, value_type> minAndMax(container c) {
 		}
 	}
 	return std::make_pair(min, max);
+}
+
+//ѕреобразование контейнера (15. ƒобавить к каждому числу полусумму минимального и максимального по абсолютной величине числа.)
+container& modify(container &c) {
+	std::pair<value_type, value_type> mM = minAndMax(c);
+	for (cIterator it = c.begin(); it != c.end(); ++it) {
+		*it += (mM.first + mM.second) / 2;
+	}
+	return c;
 }
 
 int menuItem(){
