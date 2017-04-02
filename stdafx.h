@@ -16,9 +16,9 @@
 #include <algorithm>
 #include <fstream>
 typedef int value_type;
-typedef std::deque<value_type> myContainer;
-typedef myContainer::iterator cIterator;
-extern myContainer c;
+typedef std::deque<value_type> Container;
+typedef Container::iterator cIterator;
+extern Container c;
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

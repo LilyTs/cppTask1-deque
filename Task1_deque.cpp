@@ -35,13 +35,13 @@ std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) 
 }
 
 //Заполнение контейнера случайными числами из диапазона [-M, M]
-myContainer& fillContainerWithRandNumbers(myContainer &c, int N, int M) {
+container& fillContainerWithRandNumbers(container &c, int N, int M) {
 	std::generate(c.begin(), c.end(), rand(M));
 	return c;
 }
 
 //Заполнение файла значениями из контейнера 
-std::fstream& fillFileFromContainer(std::string fileName, myContainer &c) {
+std::fstream& fillFileFromContainer(std::string fileName, container &c) {
 	std::fstream f(fileName);
 	for (cIterator it = c.begin(); it != c.end(); ++it)
 		f << *it << "\n";
@@ -50,7 +50,7 @@ std::fstream& fillFileFromContainer(std::string fileName, myContainer &c) {
 }
 
 //Заполнение контейнера значениями из файла
-myContainer& fillContainerFromFile(std::ifstream &f) {
+container& fillContainerFromFile(std::ifstream &f) {
 	c.clear();
 	if(f.is_open) {
 		while (!f.eof()) {
@@ -61,7 +61,7 @@ myContainer& fillContainerFromFile(std::ifstream &f) {
 	}
 		//reinterpret_cast<value_type>(s)
 }
-myContainer& fillContainerFromFile(std::string fileName) {
+container& fillContainerFromFile(std::string fileName) {
 	c.clear();
 	std::fstream f(fileName, std::ios_base::in);
 	if (f.is_open) {
@@ -75,11 +75,12 @@ myContainer& fillContainerFromFile(std::string fileName) {
 }
 
 //Вывод содержимого контейнера на экран
-void outputContainer(myContainer c) {
+void outputContainer(container c) {
 	for (cIterator it = c.begin(); it != c.end(); ++it) {
 		std::cout << *it << " ";
 	}
 }
+
 
 int menuItem(){
 	std::cout << "Выберите действие:\n";
@@ -117,7 +118,7 @@ void doMenuActions(){
 		std::cin >> fileName;
 		std::cout << "\nВведите количество чисел: ";
 		std::cin >> N;
-		myContainer c(N);
+		container c(N);
 		std::cout << "\nВведите границу диапазона M: ";
 		std::cin >> M;
 		switch (item)
