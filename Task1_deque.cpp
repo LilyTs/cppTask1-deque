@@ -127,7 +127,7 @@ container& modify(container &c) {
 }
 
 int menuItem(){
-	std::cout << "Выберите действие:\n";
+	std::cout << "Выберите действие:\n\n";
 	std::cout << " 1 - Заполнение текстового файла N целыми случайными числами в диапазоне от -M до M (в цикле)\n";
 	std::cout << " 2 - Заполнение текстового файла N целыми случайными числами в диапазоне от -M до M (с использованием std::generate)\n";
 	std::cout << " 3 - Заполнение контейнера N случайными числами  в диапазоне от -M до M \n";
@@ -152,32 +152,46 @@ int menuItem(){
 	return item;
 }
 
+void inputFileNameNM(std::string *fileName, int *N, int *M) {
+	std::cout << "Введите имя файла: ";
+	std::cin >> *fileName;
+	inputNM(N, M);
+}
+
+void inputNM(int *N, int *M) {
+	std::cout << "\nВведите количество чисел: ";
+	std::cin >> *N;
+	std::cout << "\nВведите границу диапазона M: ";
+	std::cin >> *M;
+	std::cout << std:: endl;
+}
+
 void doMenuActions(){
 	int item;
 	while ((item = menuItem()) != 0)
 	{
 		std::string fileName;
 		int N, M;
-		std::cout << "Введите имя файла: ";
-		std::cin >> fileName;
-		std::cout << "\nВведите количество чисел: ";
-		std::cin >> N;
-		std::cout << "\nВведите границу диапазона M: ";
-		std::cin >> M;
 		container c;
 		switch (item)
 		{
 		case 1:
+			inputFileNameNM(&fileName, &N, &M);
 			fillFileWithRandNumbers_cycle(fileName, N, M);
 			break;
 		case 2:
+			inputFileNameNM(&fileName, &N, &M);
 			fillContainerWithRandNumbers(c, N, M);
 			fillFileFromContainer(fileName, c);
 			break;
 		case 3:
+			inputNM(&N, &M);
 			fillContainerWithRandNumbers(c, N, M);
 			break;
 		case 4:
+			std::cout << "Имя файла: ";
+			std::cin >> fileName;
+			std::cout << std::endl;
 			fillContainerFromFile(fileName, c);
 			break;
 		case 5:
