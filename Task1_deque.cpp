@@ -75,7 +75,7 @@ container& fillContainerFromFile(std::string fileName) {
 }
 
 //Вывод содержимого контейнера на экран
-void outputContainer(container c) {
+void outputContainer(container &c) {
 	for (cIterator it = c.begin(); it != c.end(); ++it) {
 		std::cout << *it << " ";
 	}
@@ -179,6 +179,11 @@ void doMenuActions(){
 			fillContainerFromFile(fileName);
 			break;
 		case 5:
+			std::cout << "Исходный контейнер: ";
+			outputContainer(c);
+			modify(c);
+			outputContainer(c);
+			std::cout << "Преобразованный контейнер: ";
 			break;
 		case 6:
 			break;
