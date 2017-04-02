@@ -29,7 +29,7 @@ int rand(int M) {
 std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) {
 	std::fstream f(fileName);
 	for (int i = 0; i < N; ++i)
-		f << rand(M) << "\n";
+		f << rand(M) << " ";
 	f.close();
 	return f;
 }
@@ -53,14 +53,17 @@ std::fstream& fillFileFromContainer(std::string fileName, container &c) {
 container& fillContainerFromFile(std::ifstream &f, container &c) {
 	c.clear();
 	if(f.is_open()) {
-		while (!f.eof()) {
+		/*while (!f.eof()) {
 			std::string s;
 			std::getline(f, s);
 			c.push_back(stoi(s));
-		}
+		}*/
+		std::copy(
+		std::istream_iterator<int>(f),
+		std::istream_iterator<int>(),
+		std::inserter(c, c.begin()));
 	}
 	return c;
-		//reinterpret_cast<value_type>(s)
 }
 container& fillContainerFromFile(std::string fileName, container &c) {
 	c.clear();
@@ -69,7 +72,7 @@ container& fillContainerFromFile(std::string fileName, container &c) {
 		while (!f.eof()) {
 			std::string s;
 			std::getline(f, s);
-			c.push_back(stoi(s));
+			c.push_back(std::stoi(s.c_str()));
 		}
 	}
 	return c;
