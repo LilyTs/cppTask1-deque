@@ -89,6 +89,16 @@ container& modify(container &c) {
 	return c;
 }
 
+value_type min(container c) {
+	value_type res = abs(*c.begin());
+	for (cIterator it = ++c.begin(); it != c.end(); ++it) {
+		if (abs(*it) < res) {
+			res = *it;
+		}
+	}
+	return res;
+}
+
 
 int menuItem(){
 	std::cout << "Выберите действие:\n";
