@@ -51,6 +51,7 @@ std::fstream& fillFileFromContainer(std::string fileName, myContainer &c) {
 
 //Заполнение контейнера значениями из файла
 myContainer& fillContainerFromFile(std::ifstream &f) {
+	c.clear();
 	if(f.is_open) {
 		while (!f.eof()) {
 			std::string s;
@@ -61,8 +62,14 @@ myContainer& fillContainerFromFile(std::ifstream &f) {
 		//reinterpret_cast<value_type>(s)
 }
 
-int menuItem()
-{
+//Вывод содержимого контейнера на экран
+void outputContainer(myContainer c) {
+	for (cIterator it = c.begin(); it != c.end(); ++it) {
+		std::cout << *it << " ";
+	}
+}
+
+int menuItem(){
 	std::cout << "Выберите действие:\n";
 	std::cout << "1 - Заполнение текстового файла N целыми случайными числами в диапазоне от -M до M (в цикле)\n";
 	std::cout << "2 - Заполнение текстового файла N целыми случайными числами в диапазоне от -M до M (с использованием std::generate)\n";
@@ -86,8 +93,7 @@ int menuItem()
 	return item;
 }
 
-void doMenuActions()
-{
+void doMenuActions(){
 	int item;
 	while ((item = menuItem()) != 0)
 	{
