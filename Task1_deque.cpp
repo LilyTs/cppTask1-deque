@@ -81,6 +81,14 @@ void outputContainer(container c) {
 	}
 }
 
+//ѕреобразование контейнера (15. ƒобавить к каждому числу полусумму минимального и максимального по абсолютной величине числа.)
+container& modify(container &c) {
+	for (cIterator it = c.begin(); it != c.end(); ++it) {
+		*it += (min + max) / 2;
+	}
+	return c;
+}
+
 
 int menuItem(){
 	std::cout << "¬ыберите действие:\n";
