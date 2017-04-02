@@ -61,6 +61,18 @@ myContainer& fillContainerFromFile(std::ifstream &f) {
 	}
 		//reinterpret_cast<value_type>(s)
 }
+myContainer& fillContainerFromFile(std::string fileName) {
+	c.clear();
+	std::fstream f(fileName, std::ios_base::in);
+	if (f.is_open) {
+		while (!f.eof()) {
+			std::string s;
+			std::getline(f, s);
+			c.push_back(stoi(s));
+		}
+	}
+	//reinterpret_cast<value_type>(s)
+}
 
 //Вывод содержимого контейнера на экран
 void outputContainer(myContainer c) {
@@ -71,16 +83,18 @@ void outputContainer(myContainer c) {
 
 int menuItem(){
 	std::cout << "Выберите действие:\n";
-	std::cout << "1 - Заполнение текстового файла N целыми случайными числами в диапазоне от -M до M (в цикле)\n";
-	std::cout << "2 - Заполнение текстового файла N целыми случайными числами в диапазоне от -M до M (с использованием std::generate)\n";
-	std::cout << "3 - Заполнение контейнера числами из файла\n";
-	std::cout << "4 - Преобразование контейнера\n";
-	std::cout << "5 - Преобразование выбранной части контейнера\n";
-	std::cout << "6 - Преобразование контейнера с использованием алгоритма std::transform\n";
-	std::cout << "7 - Преобразование контейнера с использованием алгоритма std::for_each\n";
-	std::cout << "8 - Вычислить сумму чисел, содержащихся в контейнере\n";
-	std::cout << "9 - Вычислить среднее арифметическое чисел, содержащихся в контейнере\n";
-	std::cout << "0 - Выход из программы\n";
+	std::cout << " 1 - Заполнение текстового файла N целыми случайными числами в диапазоне от -M до M (в цикле)\n";
+	std::cout << " 2 - Заполнение текстового файла N целыми случайными числами в диапазоне от -M до M (с использованием std::generate)\n";
+	std::cout << " 3 - Заполнение контейнера N случайными числами  в диапазоне от -M до M \n";
+	std::cout << " 4 - Заполнение контейнера числами из файла\n";
+	std::cout << " 5 - Преобразование контейнера\n";
+	std::cout << " 6 - Преобразование выбранной части контейнера\n";
+	std::cout << " 7 - Преобразование контейнера с использованием алгоритма std::transform\n";
+	std::cout << " 8 - Преобразование контейнера с использованием алгоритма std::for_each\n";
+	std::cout << " 9 - Вычислить сумму чисел, содержащихся в контейнере\n";
+	std::cout << "10 - Вычислить среднее арифметическое чисел, содержащихся в контейнере\n";
+	std::cout << "11 - Сохранить результат в файл\n";
+	std::cout << " 0 - Выход из программы\n";
 	std::cout << std::endl;
 	int item = -1;
 	std::cin >> item;
@@ -116,13 +130,10 @@ void doMenuActions(){
 			fillFileFromContainer(fileName, c);
 			break;
 		case 3:
-		{
-			std::cout << "Введите имя файла: ";
-			std::cin >> fileName;
-			//fillDeque(f, c);
+			fillContainerWithRandNumbers(c, N, M);
 			break;
-		}
 		case 4:
+			fillContainerFromFile(fileName);
 			break;
 		case 5:
 			break;
