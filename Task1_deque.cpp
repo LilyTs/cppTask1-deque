@@ -35,13 +35,13 @@ std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) 
 }
 
 //Заполнение контейнера случайными числами из диапазона [-M, M]
-myContainer& fillDequeWithRandNumbers(myContainer &c, int N, int M) {
+myContainer& fillContainerWithRandNumbers(myContainer &c, int N, int M) {
 	std::generate(c.begin(), c.end(), rand(M));
 	return c;
 }
 
-//Заполнение файла N случайными числами из диапазона [-M, M] 
-std::fstream& fillFileWithRandNumbers_std(std::string fileName, myContainer c) {
+//Заполнение файла значениями из контейнера 
+std::fstream& fillFileFromContainer(std::string fileName, myContainer &c) {
 	std::fstream f(fileName);
 	for (cIterator it = c.begin(); it != c.end(); ++it)
 		f << *it << "\n";
@@ -49,9 +49,16 @@ std::fstream& fillFileWithRandNumbers_std(std::string fileName, myContainer c) {
 	return f;
 }
 
-//Заполнение контейнера числами из файла
-std::deque<int>& fillContainerFromFile(std::ifstream& f) {
-
+//Заполнение контейнера значениями из файла
+myContainer& fillContainerFromFile(std::ifstream &f) {
+	if(f.is_open) {
+		while (!f.eof()) {
+			std::string s;
+			std::getline(f, s);
+			c.push_back(stoi(s));
+		}
+	}
+		//reinterpret_cast<value_type>(s)
 }
 
 int menuItem()
@@ -93,14 +100,14 @@ void doMenuActions()
 		myContainer c(N);
 		std::cout << "\nВведите границу диапазона M: ";
 		std::cin >> M;
-		fillDequeWithRandNumbers(c, N, M);
 		switch (item)
 		{
 		case 1:
 			fillFileWithRandNumbers_cycle(fileName, N, M);
 			break;
 		case 2:
-			fillFileWithRandNumbers_std(fileName, c);
+			fillContainerWithRandNumbers(c, N, M);
+			fillFileFromContainer(fileName, c);
 			break;
 		case 3:
 		{
