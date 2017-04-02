@@ -50,7 +50,7 @@ std::fstream& fillFileFromContainer(std::string fileName, container &c) {
 }
 
 //Заполнение контейнера значениями из файла
-container& fillContainerFromFile(std::ifstream &f) {
+container& fillContainerFromFile(std::ifstream &f, container &c) {
 	c.clear();
 	if(f.is_open()) {
 		while (!f.eof()) {
@@ -62,7 +62,7 @@ container& fillContainerFromFile(std::ifstream &f) {
 	return c;
 		//reinterpret_cast<value_type>(s)
 }
-container& fillContainerFromFile(std::string fileName) {
+container& fillContainerFromFile(std::string fileName, container &c) {
 	c.clear();
 	std::fstream f(fileName, std::ios_base::in);
 	if (f.is_open()) {
@@ -162,9 +162,9 @@ void doMenuActions(){
 		std::cin >> fileName;
 		std::cout << "\nВведите количество чисел: ";
 		std::cin >> N;
-		container c(N);
 		std::cout << "\nВведите границу диапазона M: ";
 		std::cin >> M;
+		container c;
 		switch (item)
 		{
 		case 1:
@@ -178,7 +178,7 @@ void doMenuActions(){
 			fillContainerWithRandNumbers(c, N, M);
 			break;
 		case 4:
-			fillContainerFromFile(fileName);
+			fillContainerFromFile(fileName, c);
 			break;
 		case 5:
 			std::cout << "Исходный контейнер: ";
