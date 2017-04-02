@@ -83,8 +83,9 @@ void outputContainer(container c) {
 
 //ѕреобразование контейнера (15. ƒобавить к каждому числу полусумму минимального и максимального по абсолютной величине числа.)
 container& modify(container &c) {
+	std::pair<value_type, value_type> mM = minAndMax(c);
 	for (cIterator it = c.begin(); it != c.end(); ++it) {
-		*it += (min + max) / 2;
+		*it += (mM.first + mM.second) / 2;
 	}
 	return c;
 }
@@ -109,6 +110,19 @@ value_type max(container c) {
 	return res;
 }
 
+std::pair<value_type, value_type> minAndMax(container c) {
+	value_type min = abs(*c.begin());
+	value_type max = min;
+	for (cIterator it = ++c.begin(); it != c.end(); ++it) {
+		if (abs(*it) > max) {
+			max = *it;
+		}
+		if (abs(*it) < min) {
+			min = *it;
+		}
+	}
+	return std::make_pair(min, max);
+}
 
 int menuItem(){
 	std::cout << "¬ыберите действие:\n";
