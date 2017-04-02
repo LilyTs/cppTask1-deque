@@ -152,18 +152,18 @@ int menuItem(){
 	return item;
 }
 
-void inputFileNameNM(std::string *fileName, int *N, int *M) {
-	std::cout << "¬ведите им€ файла: ";
-	std::cin >> *fileName;
-	inputNM(N, M);
-}
-
 void inputNM(int *N, int *M) {
 	std::cout << "\n¬ведите количество чисел: ";
 	std::cin >> *N;
 	std::cout << "\n¬ведите границу диапазона M: ";
 	std::cin >> *M;
-	std::cout << std:: endl;
+	std::cout << std::endl;
+} 
+
+void inputFileNameNM(std::string *fileName, int *N, int *M) {
+	std::cout << "¬ведите им€ файла: ";
+	std::cin >> *fileName;
+	inputNM(N, M);
 }
 
 void doMenuActions(){
