@@ -164,10 +164,9 @@ void inputNM(int *N, int *M) {
 	std::cout << std::endl;
 } 
 
-void inputFileNameNM(std::string *fileName, int *N, int *M) {
+void inputFileName(std::string *fileName) {
 	std::cout << "ֲגוהטעו טלÿ פאיכא: ";
 	std::cin >> *fileName;
-	inputNM(N, M);
 }
 
 void doMenuActions(){
@@ -180,11 +179,13 @@ void doMenuActions(){
 		switch (item)
 		{
 		case 1:
-			inputFileNameNM(&fileName, &N, &M);
+			inputFileName(&fileName);
+			inputNM(&N, &M);
 			fillFileWithRandNumbers_cycle(fileName, N, M);
 			break;
 		case 2:
-			inputFileNameNM(&fileName, &N, &M);
+			inputFileName(&fileName);
+			inputNM(&N, &M);
 			fillContainerWithRandNumbers(c, N, M);
 			fillFileFromContainer(fileName, c);
 			break;
@@ -193,9 +194,7 @@ void doMenuActions(){
 			fillContainerWithRandNumbers(c, N, M);
 			break;
 		case 4:
-			std::cout << "ָלÿ פאיכא: ";
-			std::cin >> fileName;
-			std::cout << std::endl;
+			inputFileName(&fileName);
 			fillContainerFromFile(fileName, c);
 			outputContainer(c);
 			break;
@@ -217,8 +216,8 @@ void doMenuActions(){
 		case 10:
 			break;
 		case 11:
-			inputFileName(fileName);
-			saveContainerToFile;
+			inputFileName(&fileName);
+			saveContainerToFile(c, fileName);
 			break;
 		}
 	}
