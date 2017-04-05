@@ -29,7 +29,7 @@ int rand(int M) {
 std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) {
 	std::fstream f(fileName);
 	for (int i = 0; i < N; ++i)
-		f << rand(M) << " ";
+		f << rand(M) << "\n";
 	f.close();
 	return f;
 }
@@ -53,14 +53,9 @@ std::fstream& fillFileFromContainer(std::string fileName, container &c) {
 container& fillContainerFromFile(std::ifstream &f, container &c) {
 	c.clear();
 	if(f.is_open()) {
-		/*while (!f.eof()) {
-			std::string s;
-			std::getline(f, s);
-			c.push_back(stoi(s));
-		}*/
 		std::copy(
-		std::istream_iterator<int>(f),
-		std::istream_iterator<int>(),
+		std::istream_iterator<value_type>(f),
+		std::istream_iterator<value_type>(),
 		std::inserter(c, c.begin()));
 	}
 	return c;
@@ -69,14 +64,12 @@ container& fillContainerFromFile(std::string fileName, container &c) {
 	c.clear();
 	std::fstream f(fileName, std::ios_base::in);
 	if (f.is_open()) {
-		while (!f.eof()) {
-			std::string s;
-			std::getline(f, s);
-			c.push_back(std::stoi(s.c_str()));
-		}
+		std::copy(
+			std::istream_iterator<value_type>(f),
+			std::istream_iterator<value_type>(),
+			std::inserter(c, c.begin()));
 	}
 	return c;
-	//reinterpret_cast<value_type>(s)
 }
 
 //Вывод содержимого контейнера на экран
@@ -196,6 +189,7 @@ void doMenuActions(){
 			std::cin >> fileName;
 			std::cout << std::endl;
 			fillContainerFromFile(fileName, c);
+			outputContainer(c);
 			break;
 		case 5:
 			std::cout << "Исходный контейнер: ";
