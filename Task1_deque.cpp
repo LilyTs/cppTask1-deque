@@ -77,6 +77,14 @@ void outputContainer(container &c) {
 	for (cIterator it = c.begin(); it != c.end(); ++it) {
 		std::cout << *it << " ";
 	}
+	std::cout << std::endl;
+}
+
+//Вывод содержимого контейнера в файл
+bool saveContainerToFile(container &c, std::ofstream &f) {
+	for (cIterator it = c.begin(); it != c.end(); ++it) {
+		f << *it << "\n";
+	}
 }
 
 value_type min(container c) {
@@ -139,7 +147,7 @@ int menuItem(){
 	std::cout << std::endl;
 	int item = -1;
 	std::cin >> item;
-	while ((item > 9) || (item < 0))
+	while ((item > 11) || (item < 0))
 	{
 		std::cout << "Повторите ввод! " << std::endl;
 		std::cin >> item;
@@ -195,8 +203,8 @@ void doMenuActions(){
 			std::cout << "Исходный контейнер: ";
 			outputContainer(c);
 			modify(c);
-			outputContainer(c);
 			std::cout << "Преобразованный контейнер: ";
+			outputContainer(c);
 			break;
 		case 6:
 			break;
@@ -205,6 +213,12 @@ void doMenuActions(){
 		case 8:
 			break;
 		case 9:
+			break;
+		case 10:
+			break;
+		case 11:
+			inputFileName(fileName);
+			saveContainerToFile;
 			break;
 		}
 	}
