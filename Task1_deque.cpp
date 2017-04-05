@@ -81,7 +81,8 @@ void outputContainer(container &c) {
 }
 
 //Вывод содержимого контейнера в файл
-bool saveContainerToFile(container &c, std::ofstream &f) {
+void saveContainerToFile(container &c, std::string fileName) {
+	std::ofstream f(fileName);
 	for (cIterator it = c.begin(); it != c.end(); ++it) {
 		f << *it << "\n";
 	}
