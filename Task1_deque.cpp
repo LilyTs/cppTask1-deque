@@ -123,12 +123,17 @@ std::pair<value_type, value_type> minAndMax(container c) {
 }
 
 //Преобразование контейнера (15. Добавить к каждому числу полусумму минимального и максимального по абсолютной величине числа.)
-container& modify(container &c) {
+int modify(container &c) {
 	std::pair<value_type, value_type> mM = minAndMax(c);
-	for (cIterator it = c.begin(); it != c.end(); ++it) {
-		*it += (mM.first + mM.second) / 2;
+	if (!c.empty()) {
+		for (cIterator it = c.begin(); it != c.end(); ++it) {
+			*it += (mM.first + mM.second) / 2;
+		}
+		return 0;
 	}
-	return c;
+	else {
+		return 1;
+	}
 }
 
 int menuItem(){
@@ -157,17 +162,17 @@ int menuItem(){
 	return item;
 }
 
-void inputNM(int *N, int *M) {
+void inputNM(int &N, int &M) {
 	std::cout << "\nВведите количество чисел: ";
-	std::cin >> *N;
+	std::cin >> N;
 	std::cout << "\nВведите границу диапазона M: ";
-	std::cin >> *M;
+	std::cin >> M;
 	std::cout << std::endl;
 } 
 
-void inputFileName(std::string *fileName) {
+void inputFileName(std::string &fileName) {
 	std::cout << "Введите имя файла: ";
-	std::cin >> *fileName;
+	std::cin >> fileName;
 }
 
 void doMenuActions(){
@@ -180,22 +185,22 @@ void doMenuActions(){
 		switch (item)
 		{
 		case 1:
-			inputFileName(&fileName);
-			inputNM(&N, &M);
+			inputFileName(fileName);
+			inputNM(N, M);
 			fillFileWithRandNumbers_cycle(fileName, N, M);
 			break;
 		case 2:
-			inputFileName(&fileName);
-			inputNM(&N, &M);
+			inputFileName(fileName);
+			inputNM(N, M);
 			fillContainerWithRandNumbers(c, N, M);
 			fillFileFromContainer(fileName, c);
 			break;
 		case 3:
-			inputNM(&N, &M);
+			inputNM(N, M);
 			fillContainerWithRandNumbers(c, N, M);
 			break;
 		case 4:
-			inputFileName(&fileName);
+			inputFileName(fileName);
 			fillContainerFromFile(fileName, c);
 			outputContainer(c);
 			break;
@@ -217,8 +222,8 @@ void doMenuActions(){
 		case 10:
 			break;
 		case 11:
-			inputFileName(&fileName);
-			saveContainerToFile(c, fileName);
+			inputFileName(fileName);
+			fillFileFromContainer(fileName, c);
 			break;
 		}
 	}
