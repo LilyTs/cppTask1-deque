@@ -127,6 +127,19 @@ int modify(container &c) {
 	}
 }
 
+//Преобразование выбранной части контейнера
+int modify(cIterator first, cIterator last, container &c) {
+	std::pair<value_type, value_type> mM = minAndMax(c);
+	if (!c.empty()) {
+		for (cIterator it = first; it != last; ++it) {
+			*it += (mM.first + mM.second) / 2;
+		}
+	}
+	else {
+		return 1;
+	}
+}
+
 int menuItem(){
 	std::cout << "\nВыберите действие:\n\n";
 	std::cout << " 1 - Заполнение текстового файла N целыми случайными числами в диапазоне от -M до M (в цикле)\n";
@@ -206,7 +219,27 @@ void doMenuActions(){
 				std::cout << "Невозможно выполнить преобразование." << std::endl;
 			}
 			break;
-		case 6:
+		case 6: {
+			cIterator first, last;
+			int num_first, num_last;
+			std::cout << "Введите, с какого по какой элемент (включительно) требуется выполнить преобразование:\n";
+			std::cout << "c ";
+			std::cin >> num_first;
+			first = c.begin() + num_first - 1;
+			std::cout << " по ";
+			std::cin >> num_last;
+			std::cout << std::endl;
+			last = c.end() - (c.size() - num_last);
+			std::cout << "\nИсходный контейнер:\n";
+			outputContainer(c);
+			if (modify(first, last, c) == 0) {
+				std::cout << "Преобразованный контейнер:\n";
+				outputContainer(c);
+			}
+			else {
+				std::cout << "Невозможно выполнить преобразование." << std::endl;
+			}
+		}
 			break;
 		case 7:
 			break;
