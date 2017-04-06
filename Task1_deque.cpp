@@ -50,7 +50,7 @@ std::fstream& fillFileFromContainer(std::string fileName, container &c) {
 }
 
 //Заполнение контейнера значениями из файла
-container& fillContainerFromFile(std::ifstream &f, container &c) {
+void fillContainerFromFile(std::ifstream &f, container &c) {
 	c.clear();
 	if(f.is_open()) {
 		std::copy(
@@ -60,14 +60,14 @@ container& fillContainerFromFile(std::ifstream &f, container &c) {
 	}
 	return c;
 }
-container& fillContainerFromFile(std::string fileName, container &c) {
+void fillContainerFromFile(std::string fileName, container &c) {
 	c.clear();
 	std::fstream f(fileName, std::ios_base::in);
 	if (f.is_open()) {
 		std::copy(
 			std::istream_iterator<value_type>(f),
 			std::istream_iterator<value_type>(),
-			std::inserter(c, c.begin()));
+			/*std::inserter(c, c.begin())*/std::back_inserter<container>(c));
 	}
 	return c;
 }
@@ -88,7 +88,7 @@ void saveContainerToFile(container &c, std::string fileName) {
 	}
 }
 
-value_type min(container c) {
+value_type min(container &c) {
 	value_type res = abs(*c.begin());
 	for (cIterator it = ++c.begin(); it != c.end(); ++it) {
 		if (abs(*it) < res) {
@@ -98,7 +98,7 @@ value_type min(container c) {
 	return res;
 }
 
-value_type max(container c) {
+value_type max(container &c) {
 	value_type res = abs(*c.begin());
 	for (cIterator it = ++c.begin(); it != c.end(); ++it) {
 		if (abs(*it) > res) {
@@ -108,7 +108,7 @@ value_type max(container c) {
 	return res;
 }
 
-std::pair<value_type, value_type> minAndMax(container c) {
+std::pair<value_type, value_type> minAndMax(container &c) {
 	value_type min = abs(*c.begin());
 	value_type max = min;
 	for (cIterator it = ++c.begin(); it != c.end(); ++it) {
@@ -125,9 +125,10 @@ std::pair<value_type, value_type> minAndMax(container c) {
 //Преобразование контейнера (15. Добавить к каждому числу полусумму минимального и максимального по абсолютной величине числа.)
 int modify(container &c) {
 	std::pair<value_type, value_type> mM = minAndMax(c);
+	//float halfsum = (min(c) + max(c)) / 2;
 	if (!c.empty()) {
 		for (cIterator it = c.begin(); it != c.end(); ++it) {
-			*it += (mM.first + mM.second) / 2;
+			(*it) += (mM.first + mM.second)/2/* halfsum*/;
 		}
 		return 0;
 	}
@@ -137,7 +138,7 @@ int modify(container &c) {
 }
 
 int menuItem(){
-	std::cout << "Выберите действие:\n\n";
+	std::cout << "\nВыберите действие:\n\n";
 	std::cout << " 1 - Заполнение текстового файла N целыми случайными числами в диапазоне от -M до M (в цикле)\n";
 	std::cout << " 2 - Заполнение текстового файла N целыми случайными числами в диапазоне от -M до M (с использованием std::generate)\n";
 	std::cout << " 3 - Заполнение контейнера N случайными числами  в диапазоне от -M до M \n";
@@ -177,11 +178,11 @@ void inputFileName(std::string &fileName) {
 
 void doMenuActions(){
 	int item;
+	container c;
 	while ((item = menuItem()) != 0)
 	{
 		std::string fileName;
 		int N, M;
-		container c;
 		switch (item)
 		{
 		case 1:
@@ -205,11 +206,15 @@ void doMenuActions(){
 			outputContainer(c);
 			break;
 		case 5:
-			std::cout << "Исходный контейнер: ";
+			std::cout << "Исходный контейнер:\n";
 			outputContainer(c);
-			modify(c);
-			std::cout << "Преобразованный контейнер: ";
-			outputContainer(c);
+			if (modify(c) == 0) {
+				std::cout << "Преобразованный контейнер:\n";
+				outputContainer(c);
+			}
+			else {
+				std::cout << "Невозможно выполнить преобразование." << std::endl;
+			}
 			break;
 		case 6:
 			break;
