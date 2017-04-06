@@ -21,7 +21,6 @@
 
 //Генератор случайного целого числа из диапазона [-M, M]
 int rand(int M) {
-	//srand(time(nullptr));
 	return std::rand() % (2 * M) + (-M);
 }
 
@@ -36,6 +35,7 @@ std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) 
 
 //Заполнение контейнера случайными числами из диапазона [-M, M]
 container& fillContainerWithRandNumbers(container &c, int N, int M) {
+	c.resize(N);
 	std::generate(c.begin(), c.end(), [&]() {return rand(M); });
 	return c;
 }
@@ -58,7 +58,6 @@ void fillContainerFromFile(std::ifstream &f, container &c) {
 		std::istream_iterator<value_type>(),
 		std::inserter(c, c.begin()));
 	}
-	return c;
 }
 void fillContainerFromFile(std::string fileName, container &c) {
 	c.clear();
@@ -69,7 +68,6 @@ void fillContainerFromFile(std::string fileName, container &c) {
 			std::istream_iterator<value_type>(),
 			/*std::inserter(c, c.begin())*/std::back_inserter<container>(c));
 	}
-	return c;
 }
 
 //Вывод содержимого контейнера на экран
@@ -78,14 +76,6 @@ void outputContainer(container &c) {
 		std::cout << *it << " ";
 	}
 	std::cout << std::endl;
-}
-
-//Вывод содержимого контейнера в файл
-void saveContainerToFile(container &c, std::string fileName) {
-	std::ofstream f(fileName);
-	for (cIterator it = c.begin(); it != c.end(); ++it) {
-		f << *it << "\n";
-	}
 }
 
 value_type min(container &c) {
