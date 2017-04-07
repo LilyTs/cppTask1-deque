@@ -141,6 +141,10 @@ value_type sum(container &c) {
 	return res;
 }
 
+float average(container &c) {
+	return (sum(c) / c.size());
+}
+
 int menuItem(){
 	std::cout << "\nВыберите действие:\n\n";
 	std::cout << " 1 - Заполнение текстового файла N целыми случайными числами в диапазоне от -M до M (в цикле)\n";
@@ -261,6 +265,9 @@ void doMenuActions(){
 			std::cout << "Сумма элементов контейнера: " << sum(c) << std::endl;
 			break;
 		case 10:
+			std::cout << "Контенер: ";
+			outputContainer(c);
+			std::cout << "Среднее арифметическое элементов контейнера: " << average(c) << std::endl;
 			break;
 		case 11:
 			inputFileName(fileName);
