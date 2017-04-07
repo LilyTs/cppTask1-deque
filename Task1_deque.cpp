@@ -115,15 +115,27 @@ int modify(cIterator first, cIterator last, container &c) {
 		for (cIterator it = first; it != last; ++it) {
 			*it += hs;
 		}
+		return 0;
 	}
 	else {
 		return 1;
 	}
 }
 
+//функтор (прибавляет некоторое число b)
+struct addNumber {
+	addNumber(float b) : a(b) {};
+	float operator()( value_type &el) {
+		return el + a;
+	}
+	float a;
+};
+
 int transform(container &c) {
 	if (!c.empty()) {
-		std::transform(c.begin(), c.end(), c.begin(), [&](){});
+		float hs = halfsumOfMinAndMax(c);
+		std::transform(c.begin(), c.end(), c.begin(), addNumber(hs));
+		return 0;
 	}
 	else {
 		return 1;
