@@ -130,6 +130,17 @@ int transform(container &c) {
 	}
 }
 
+value_type sum(container &c) {
+	value_type res = 0;
+
+	for each (value_type x in c)
+	{
+		res += x;
+	}
+
+	return res;
+}
+
 int menuItem(){
 	std::cout << "\nВыберите действие:\n\n";
 	std::cout << " 1 - Заполнение текстового файла N целыми случайными числами в диапазоне от -M до M (в цикле)\n";
@@ -245,6 +256,9 @@ void doMenuActions(){
 		case 8:
 			break;
 		case 9:
+			std::cout << "Контенер: ";
+			outputContainer(c);
+			std::cout << "Сумма элементов контейнера: " << sum(c) << std::endl;
 			break;
 		case 10:
 			break;
