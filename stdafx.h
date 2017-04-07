@@ -15,7 +15,7 @@
 #include <sstream>
 #include <algorithm>
 #include <fstream>
-typedef int value_type;
+typedef float value_type;
 typedef std::deque<value_type> container;
 typedef container::iterator cIterator;
 
