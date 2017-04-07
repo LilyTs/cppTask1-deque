@@ -26,7 +26,7 @@ int rand(int M) {
 
 //Заполнение файла N случайными числами из диапазона [-M, M] (в цикле)
 std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) {
-	std::fstream f(fileName);
+	std::fstream f(fileName, std::ios::out);
 	for (int i = 0; i < N; ++i)
 		f << rand(M) << "\n";
 	f.close();
@@ -42,7 +42,7 @@ container& fillContainerWithRandNumbers(container &c, int N, int M) {
 
 //Заполнение файла значениями из контейнера 
 std::fstream& fillFileFromContainer(std::string fileName, container &c) {
-	std::fstream f(fileName);
+	std::fstream f(fileName, std::ios::out);
 	for (cIterator it = c.begin(); it != c.end(); ++it)
 		f << *it << "\n";
 	f.close();
@@ -134,6 +134,15 @@ int modify(cIterator first, cIterator last, container &c) {
 		for (cIterator it = first; it != last; ++it) {
 			*it += (mM.first + mM.second) / 2;
 		}
+	}
+	else {
+		return 1;
+	}
+}
+
+int transform(container &c) {
+	if (!c.empty()) {
+		std::transform(c.begin(), c.end(), c.begin(), [&](){});
 	}
 	else {
 		return 1;
@@ -242,6 +251,15 @@ void doMenuActions(){
 		}
 			break;
 		case 7:
+			std::cout << "Исходный контейнер:\n";
+			outputContainer(c);
+			if (transform(c) == 0) {
+				std::cout << "Преобразованный контейнер:\n";
+				outputContainer(c);
+			}
+			else {
+				std::cout << "Невозможно выполнить преобразование." << std::endl;
+			}
 			break;
 		case 8:
 			break;
