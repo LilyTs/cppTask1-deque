@@ -56,7 +56,7 @@ void fillContainerFromFile(std::ifstream &f, container &c) {
 		std::copy(
 		std::istream_iterator<value_type>(f),
 		std::istream_iterator<value_type>(),
-		std::inserter(c, c.begin()));
+		std::back_inserter<container>(c));
 	}
 }
 void fillContainerFromFile(std::string fileName, container &c) {
@@ -66,7 +66,7 @@ void fillContainerFromFile(std::string fileName, container &c) {
 		std::copy(
 			std::istream_iterator<value_type>(f),
 			std::istream_iterator<value_type>(),
-			/*std::inserter(c, c.begin())*/std::back_inserter<container>(c));
+			std::back_inserter<container>(c));
 	}
 }
 
@@ -78,29 +78,10 @@ void outputContainer(container &c) {
 	std::cout << std::endl;
 }
 
-value_type min(container &c) {
-	value_type res = abs(*c.begin());
-	for (cIterator it = ++c.begin(); it != c.end(); ++it) {
-		if (abs(*it) < res) {
-			res = *it;
-		}
-	}
-	return res;
-}
-
-value_type max(container &c) {
-	value_type res = abs(*c.begin());
-	for (cIterator it = ++c.begin(); it != c.end(); ++it) {
-		if (abs(*it) > res) {
-			res = *it;
-		}
-	}
-	return res;
-}
-
-std::pair<value_type, value_type> minAndMax(container &c) {
+float halfsumOfMinAndMax(container &c) {
 	value_type min = abs(*c.begin());
 	value_type max = min;
+
 	for (cIterator it = ++c.begin(); it != c.end(); ++it) {
 		if (abs(*it) > max) {
 			max = *it;
@@ -109,16 +90,16 @@ std::pair<value_type, value_type> minAndMax(container &c) {
 			min = *it;
 		}
 	}
-	return std::make_pair(min, max);
+
+	return ((min + max) / 2);
 }
 
 //ѕреобразование контейнера (15. ƒобавить к каждому числу полусумму минимального и максимального по абсолютной величине числа.)
 int modify(container &c) {
-	std::pair<value_type, value_type> mM = minAndMax(c);
-	//float halfsum = (min(c) + max(c)) / 2;
+	float hs = halfsumOfMinAndMax(c);
 	if (!c.empty()) {
 		for (cIterator it = c.begin(); it != c.end(); ++it) {
-			(*it) += (mM.first + mM.second)/2/* halfsum*/;
+			(*it) += hs;
 		}
 		return 0;
 	}
@@ -129,10 +110,10 @@ int modify(container &c) {
 
 //ѕреобразование выбранной части контейнера
 int modify(cIterator first, cIterator last, container &c) {
-	std::pair<value_type, value_type> mM = minAndMax(c);
+	float hs = halfsumOfMinAndMax(c);
 	if (!c.empty()) {
 		for (cIterator it = first; it != last; ++it) {
-			*it += (mM.first + mM.second) / 2;
+			*it += hs;
 		}
 	}
 	else {
