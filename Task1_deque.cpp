@@ -123,11 +123,23 @@ int modify(cIterator first, cIterator last, container &c) {
 }
 
 //функтор (прибавляет некоторое число b)
-struct addNumber {
-	addNumber(float b) : a(b) {};
-	float operator()( value_type &el) {
+class addNumber {
+public:
+	explicit addNumber(float b) : a(b) {}
+	float operator()( value_type &el) const {
 		return el + a;
 	}
+private:
+	float a;
+};
+
+class addNumber_for_each {
+public:
+	explicit addNumber_for_each(float b) : a(b) {}
+	void operator()(value_type &el) const {
+		el += a;
+	}
+private:
 	float a;
 };
 
@@ -135,6 +147,17 @@ int transform(container &c) {
 	if (!c.empty()) {
 		float hs = halfsumOfMinAndMax(c);
 		std::transform(c.begin(), c.end(), c.begin(), addNumber(hs));
+		return 0;
+	}
+	else {
+		return 1;
+	}
+}
+
+int modify_for_each(container &c) {
+	if (!c.empty()) {
+		float hs = halfsumOfMinAndMax(c);
+		std::for_each(c.begin(), c.end(), addNumber_for_each(hs));
 		return 0;
 	}
 	else {
@@ -270,6 +293,15 @@ void doMenuActions(){
 			}
 			break;
 		case 8:
+			std::cout << "Исходный контейнер:\n";
+			outputContainer(c);
+			if (modify_for_each(c) == 0) {
+				std::cout << "Преобразованный контейнер:\n";
+				outputContainer(c);
+			}
+			else {
+				std::cout << "Невозможно выполнить преобразование." << std::endl;
+			}
 			break;
 		case 9:
 			std::cout << "Контенер: ";
