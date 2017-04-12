@@ -26,9 +26,9 @@ int rand(int M) {
 
 //Заполнение файла N случайными числами из диапазона [-M, M] (в цикле)
 std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) {
-	std::fstream f(fileName, std::ios::out);
+	static std::fstream f(fileName, std::ios::out);
 	for (int i = 0; i < N; ++i)
-		f << rand(M) << "\n";
+		f << (value_type)rand(M) << "\n";
 	f.close();
 	return f;
 }
@@ -36,13 +36,13 @@ std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) 
 //Заполнение контейнера случайными числами из диапазона [-M, M]
 container& fillContainerWithRandNumbers(container &c, int N, int M) {
 	c.resize(N);
-	std::generate(c.begin(), c.end(), [&]() {return rand(M); });
+	std::generate(c.begin(), c.end(), [&]() {return (value_type)rand(M); });
 	return c;
 }
 
 //Заполнение файла значениями из контейнера 
 std::fstream& fillFileFromContainer(std::string fileName, container &c) {
-	std::fstream f(fileName, std::ios::out);
+	static std::fstream f(fileName, std::ios::out);
 	for (cIterator it = c.begin(); it != c.end(); ++it)
 		f << *it << "\n";
 	f.close();
@@ -70,7 +70,7 @@ void fillContainerFromFile(std::string fileName, container &c) {
 	}
 }
 
-//Вывод содержимого контейнера на экран
+//Вывод элементов контейнера на экран
 void outputContainer(container &c) {
 	for (cIterator it = c.begin(); it != c.end(); ++it) {
 		std::cout << *it << " ";
@@ -78,15 +78,15 @@ void outputContainer(container &c) {
 	std::cout << std::endl;
 }
 
-float halfsumOfMinAndMax(container &c) {
-	value_type min = abs(*c.begin());
+double halfsumOfMinAndMax(container &c) {
+	value_type min = *c.begin();
 	value_type max = min;
 
 	for (cIterator it = ++c.begin(); it != c.end(); ++it) {
-		if (abs(*it) > max) {
+		if ((abs(*it)) > max) {
 			max = *it;
 		}
-		if (abs(*it) < min) {
+		if ((abs(*it)) < min) {
 			min = *it;
 		}
 	}
@@ -96,7 +96,7 @@ float halfsumOfMinAndMax(container &c) {
 
 //Преобразование контейнера (15. Добавить к каждому числу полусумму минимального и максимального по абсолютной величине числа.)
 int modify(container &c) {
-	float hs = halfsumOfMinAndMax(c);
+	double hs = halfsumOfMinAndMax(c);
 	if (!c.empty()) {
 		for (cIterator it = c.begin(); it != c.end(); ++it) {
 			(*it) += hs;
@@ -104,13 +104,13 @@ int modify(container &c) {
 		return 0;
 	}
 	else {
-		return 1;
+		return -1;
 	}
 }
 
 //Преобразование выбранной части контейнера
 int modify(cIterator first, cIterator last, container &c) {
-	float hs = halfsumOfMinAndMax(c);
+	double hs = halfsumOfMinAndMax(c);
 	if (!c.empty()) {
 		for (cIterator it = first; it != last; ++it) {
 			*it += hs;
@@ -118,50 +118,50 @@ int modify(cIterator first, cIterator last, container &c) {
 		return 0;
 	}
 	else {
-		return 1;
+		return -1;
 	}
 }
 
 //функтор (прибавляет некоторое число b)
 class addNumber {
 public:
-	explicit addNumber(float b) : a(b) {}
-	float operator()( value_type &el) const {
+	explicit addNumber(double b) : a(b) {}
+	double operator()( value_type &el) const {
 		return el + a;
 	}
 private:
-	float a;
+	double a;
 };
 
 class addNumber_for_each {
 public:
-	explicit addNumber_for_each(float b) : a(b) {}
+	explicit addNumber_for_each(double b) : a(b) {}
 	void operator()(value_type &el) const {
-		el += a;
+		el += static_cast<value_type>(a);
 	}
 private:
-	float a;
+	double a;
 };
 
 int transform(container &c) {
 	if (!c.empty()) {
-		float hs = halfsumOfMinAndMax(c);
+		double hs = halfsumOfMinAndMax(c);
 		std::transform(c.begin(), c.end(), c.begin(), addNumber(hs));
 		return 0;
 	}
 	else {
-		return 1;
+		return -1;
 	}
 }
 
 int modify_for_each(container &c) {
 	if (!c.empty()) {
-		float hs = halfsumOfMinAndMax(c);
+		double hs = halfsumOfMinAndMax(c);
 		std::for_each(c.begin(), c.end(), addNumber_for_each(hs));
 		return 0;
 	}
 	else {
-		return 1;
+		return -1;
 	}
 }
 
@@ -176,7 +176,7 @@ value_type sum(container &c) {
 	return res;
 }
 
-float average(container &c) {
+double average(container &c) {
 	return (sum(c) / c.size());
 }
 
@@ -195,14 +195,17 @@ int menuItem(){
 	std::cout << "11 - Сохранить результат в файл\n";
 	std::cout << " 0 - Выход из программы\n";
 	std::cout << std::endl;
+
 	int item = -1;
 	std::cin >> item;
+
 	while ((item > 11) || (item < 0))
 	{
 		std::cout << "Повторите ввод! " << std::endl;
 		std::cin >> item;
 	}
 	std::cout << std::endl;
+
 	return item;
 }
 
@@ -222,10 +225,12 @@ void inputFileName(std::string &fileName) {
 void doMenuActions(){
 	int item;
 	container c;
+
 	while ((item = menuItem()) != 0)
 	{
 		std::string fileName;
 		int N, M;
+
 		switch (item)
 		{
 		case 1:
@@ -246,6 +251,7 @@ void doMenuActions(){
 		case 4:
 			inputFileName(fileName);
 			fillContainerFromFile(fileName, c);
+			std::cout << "Контейнер: ";
 			outputContainer(c);
 			break;
 		case 5:
@@ -262,14 +268,16 @@ void doMenuActions(){
 		case 6: {
 			cIterator first, last;
 			int num_first, num_last;
+
 			std::cout << "Введите, с какого по какой элемент (включительно) требуется выполнить преобразование:\n";
 			std::cout << "c ";
 			std::cin >> num_first;
 			first = c.begin() + num_first - 1;
-			std::cout << " по ";
+			std::cout << "по ";
 			std::cin >> num_last;
 			std::cout << std::endl;
 			last = c.end() - (c.size() - num_last);
+
 			std::cout << "\nИсходный контейнер:\n";
 			outputContainer(c);
 			if (modify(first, last, c) == 0) {
