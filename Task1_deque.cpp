@@ -13,7 +13,8 @@
 *  6. Функцию, реализующую требуемое преобразование с использованием алгоритма std::for_each вместо функции modify.
 *  7. Функции, вычисляющие сумму и среднее арифметическое чисел, содержащихся в контейнере.
 *  8. Функцию вывода результата в файл и на экран(опционально).
-*  Мой вариант : B) двусторонняя очередь(std::deque)
+*  -------------------------------------------------------------------------------
+   Мой вариант : B) двусторонняя очередь(std::deque)
 *  15. Добавить к каждому числу полусумму минимального и максимального по абсолютной величине числа.
 */
 
@@ -86,7 +87,23 @@ double halfsumOfMinAndMax(container &c) {
 		if ((abs(*it)) > abs(max)) {
 			max = *it;
 		}
-		if ((abs(*it)) < min) {
+		if ((abs(*it)) < abs(min)) {
+			min = *it;
+		}
+	}
+
+	return ((min + max) / 2);
+}
+//поиск полусуммы минимума и максимума на промежутке
+double halfsumOfMinAndMax(cIterator first, cIterator last/*, container &c*/) {
+	value_type min = *first;
+	value_type max = min;
+
+	for (cIterator it = ++first; it != last; ++it) {
+		if ((abs(*it)) > abs(max)) {
+			max = *it;
+		}
+		if ((abs(*it)) < abs(min)) {
 			min = *it;
 		}
 	}
@@ -110,7 +127,7 @@ int modify(container &c) {
 
 //Преобразование выбранной части контейнера
 int modify(cIterator first, cIterator last, container &c) {
-	double hs = halfsumOfMinAndMax(c);
+	double hs = halfsumOfMinAndMax(first, last);
 	if (!c.empty()) {
 		for (cIterator it = first; it != last; ++it) {
 			*it += hs;
@@ -268,14 +285,21 @@ void doMenuActions(){
 		case 6: {
 			cIterator first, last;
 			int num_first, num_last;
+			bool ok;
 
 			std::cout << "Введите, с какого по какой элемент (включительно) требуется выполнить преобразование:\n";
-			std::cout << "c ";
-			std::cin >> num_first;
-			first = c.begin() + num_first - 1;
-			std::cout << "по ";
-			std::cin >> num_last;
+			do {
+				std::cout << "c ";
+				std::cin >> num_first;
+				std::cout << "по ";
+				std::cin >> num_last;
+				ok = (num_first > 0) && (num_first <= c.size()) && (num_last > num_first) && (num_last <= c.size());
+				if (!ok) {
+					std::cout << "Ошибка! Повторите ввод:\n";
+				}
+			} while (!ok);
 			std::cout << std::endl;
+			first = c.begin() + num_first - 1;
 			last = c.end() - (c.size() - num_last);
 
 			std::cout << "\nИсходный контейнер:\n";
