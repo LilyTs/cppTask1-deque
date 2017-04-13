@@ -83,7 +83,7 @@ double halfsumOfMinAndMax(container &c) {
 	value_type max = min;
 
 	for (cIterator it = ++c.begin(); it != c.end(); ++it) {
-		if ((abs(*it)) > max) {
+		if ((abs(*it)) > abs(max)) {
 			max = *it;
 		}
 		if ((abs(*it)) < min) {
