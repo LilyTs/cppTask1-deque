@@ -22,7 +22,9 @@
 
 //Генератор случайного целого числа из диапазона [-M, M]
 int rand(int M) {
-	return std::rand() % (2 * M) + (-M);
+	if(M != 0)
+		return std::rand() % (2 * M) + (-M);
+	return 0;
 }
 
 //Заполнение файла N случайными числами из диапазона [-M, M] (в цикле)
@@ -51,7 +53,7 @@ std::fstream& fillFileFromContainer(std::string fileName, container &c) {
 }
 
 //Заполнение контейнера значениями из файла
-void fillContainerFromFile(std::ifstream &f, container &c) {
+/*void fillContainerFromFile(std::ifstream &f, container &c) {
 	c.clear();
 	if(f.is_open()) {
 		std::copy(
@@ -59,7 +61,7 @@ void fillContainerFromFile(std::ifstream &f, container &c) {
 		std::istream_iterator<value_type>(),
 		std::back_inserter<container>(c));
 	}
-}
+}*/
 int fillContainerFromFile(std::string fileName, container &c) {
 	c.clear();
 	std::fstream f(fileName, std::ios_base::in);
@@ -98,8 +100,8 @@ double halfsumOfMinAndMax(container &c) {
 
 	return ((min + max) / 2);
 }
-//поиск полусуммы минимума и максимума на промежутке
-double halfsumOfMinAndMax(cIterator first, cIterator last/*, container &c*/) {
+//поиск полусуммы минимума и максимума в части контейнера
+double halfsumOfMinAndMax(cIterator first, cIterator last) {
 	value_type min = *first;
 	value_type max = min;
 
@@ -124,9 +126,7 @@ int modify(container &c) {
 		}
 		return 0;
 	}
-	else {
-		return -1;
-	}
+	return -1;
 }
 
 //Преобразование выбранной части контейнера
@@ -138,9 +138,7 @@ int modify(cIterator first, cIterator last, container &c) {
 		}
 		return 0;
 	}
-	else {
-		return -1;
-	}
+	return -1;
 }
 
 //функтор (прибавляет некоторое число b)
@@ -170,9 +168,7 @@ int transform(container &c) {
 		std::transform(c.begin(), c.end(), c.begin(), addNumber(hs));
 		return 0;
 	}
-	else {
-		return -1;
-	}
+	return -1;
 }
 
 int modify_for_each(container &c) {
@@ -181,9 +177,7 @@ int modify_for_each(container &c) {
 		std::for_each(c.begin(), c.end(), addNumber_for_each(hs));
 		return 0;
 	}
-	else {
-		return -1;
-	}
+	return -1;
 }
 
 value_type sum(container &c) {
@@ -214,13 +208,13 @@ int menuItem(){
 	std::cout << " 9 - Вычислить сумму чисел, содержащихся в контейнере\n";
 	std::cout << "10 - Вычислить среднее арифметическое чисел, содержащихся в контейнере\n";
 	std::cout << "11 - Сохранить результат в файл\n";
-	std::cout << " 0 - Выход из программы\n";
-	std::cout << std::endl;
+	std::cout << "12 - Вывести элементы контейнера на экран\n";
+	std::cout << " 0 - Выход из программы\n" << std::endl;
 
 	int item = -1;
 	std::cin >> item;
 
-	while ((item > 11) || (item < 0))
+	while ((item > 12) || (item < 0))
 	{
 		std::cout << "Повторите ввод! " << std::endl;
 		std::cin >> item;
@@ -357,6 +351,13 @@ void doMenuActions(){
 			inputFileName(fileName);
 			fillFileFromContainer(fileName, c);
 			break;
+		case 12:
+			if (!c.empty()) {
+				std::cout << "Контенер: ";
+				outputContainer(c);
+			}
+			else
+				std::cout << "Контейнера пуст." << std::endl;
 		}
 	}
 }
