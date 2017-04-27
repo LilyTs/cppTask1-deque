@@ -225,10 +225,13 @@ int menuItem(){
 }
 
 void inputNM(int &N, int &M) {
-	std::cout << "\n¬ведите количество чисел: ";
-	std::cin >> N;
+	do {
+		std::cout << "\n¬ведите количество чисел: ";
+		std::cin >> N;
+	} while (N < 0);
 	std::cout << "\n¬ведите границу диапазона M: ";
 	std::cin >> M;
+	if (M < 0) M = abs(M);
 	std::cout << std::endl;
 } 
 
