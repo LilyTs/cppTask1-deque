@@ -35,7 +35,7 @@ std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) 
 	f.close();
 	return f;
 }
-
+//разберется с лямбдой
 //Заполнение контейнера случайными числами из диапазона [-M, M]
 container& fillContainerWithRandNumbers(container &c, int N, int M) {
 	c.resize(N);
@@ -62,6 +62,8 @@ std::fstream& fillFileFromContainer(std::string fileName, container &c) {
 		std::back_inserter<container>(c));
 	}
 }*/
+
+//тоже будет разбираться
 int fillContainerFromFile(std::string fileName, container &c) {
 	c.clear();
 	std::fstream f(fileName, std::ios_base::in);
@@ -85,22 +87,7 @@ void outputContainer(container &c) {
 	std::cout << std::endl;
 }
 
-double halfsumOfMinAndMax(container &c) {
-	value_type min = *c.begin();
-	value_type max = min;
-
-	for (cIterator it = ++c.begin(); it != c.end(); ++it) {
-		if ((abs(*it)) > abs(max)) {
-			max = *it;
-		}
-		if ((abs(*it)) < abs(min)) {
-			min = *it;
-		}
-	}
-
-	return ((min + max) / 2);
-}
-//поиск полусуммы минимума и максимума в части контейнера
+//поиск полусуммы минимума и максимума
 double halfsumOfMinAndMax(cIterator first, cIterator last) {
 	value_type min = *first;
 	value_type max = min;
@@ -117,9 +104,14 @@ double halfsumOfMinAndMax(cIterator first, cIterator last) {
 	return ((min + max) / 2);
 }
 
+//-------------------------------------------------
+//!!!!!!!!запустить и попробовать поработать с пустым файлом!!!!!!!!!!!!!
+//проверка на пустоту first != last и нужна ли она вообще?
+//--------------------------------------------------------------
+
 //Преобразование контейнера (15. Добавить к каждому числу полусумму минимального и максимального по абсолютной величине числа.)
 int modify(container &c) {
-	double hs = halfsumOfMinAndMax(c);
+	double hs = halfsumOfMinAndMax(c.begin(), c.end());
 	if (!c.empty()) {
 		for (cIterator it = c.begin(); it != c.end(); ++it) {
 			(*it) += hs;
@@ -129,6 +121,7 @@ int modify(container &c) {
 	return -1;
 }
 
+//контейнер не нужен, проверка (нужна ли? можно работать с пустым контейнером) через итераторы
 //Преобразование выбранной части контейнера
 int modify(cIterator first, cIterator last, container &c) {
 	double hs = halfsumOfMinAndMax(first, last);
@@ -141,6 +134,7 @@ int modify(cIterator first, cIterator last, container &c) {
 	return -1;
 }
 
+//не нужна передача по ссылке!
 //функтор (прибавляет некоторое число b)
 class addNumber {
 public:
@@ -164,7 +158,7 @@ private:
 
 int transform(container &c) {
 	if (!c.empty()) {
-		double hs = halfsumOfMinAndMax(c);
+		double hs = halfsumOfMinAndMax(c.begin(), c.end());
 		std::transform(c.begin(), c.end(), c.begin(), addNumber(hs));
 		return 0;
 	}
@@ -173,7 +167,7 @@ int transform(container &c) {
 
 int modify_for_each(container &c) {
 	if (!c.empty()) {
-		double hs = halfsumOfMinAndMax(c);
+		double hs = halfsumOfMinAndMax(c.begin(), c.end());
 		std::for_each(c.begin(), c.end(), addNumber_for_each(hs));
 		return 0;
 	}
