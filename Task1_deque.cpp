@@ -29,7 +29,7 @@ int rand(int M) {
 
 //Заполнение файла N случайными числами из диапазона [-M, M] (в цикле)
 std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) {
-	static std::fstream f(fileName, std::ios::out);
+	std::fstream f(fileName, std::ios::out);
 	for (int i = 0; i < N; ++i)
 		f << (value_type)rand(M) << "\n"; 
 	f.close();
@@ -45,7 +45,7 @@ container& fillContainerWithRandNumbers(container &c, int N, int M) {
 
 //Заполнение файла значениями из контейнера 
 std::fstream& fillFileFromContainer(std::string fileName, container &c) {
-	static std::fstream f(fileName, std::ios::out);
+	std::fstream f(fileName, std::ios::out);
 	for (cIterator it = c.begin(); it != c.end(); ++it)
 		f << *it << "\n";
 	f.close();
@@ -240,6 +240,7 @@ void inputFileName(std::string &fileName) {
 void doMenuActions(){
 	int item;
 	container c;
+	std::fstream f;
 
 	while ((item = menuItem()) != 0)
 	{
@@ -295,7 +296,7 @@ void doMenuActions(){
 				std::cin >> num_first;
 				std::cout << "по ";
 				std::cin >> num_last;
-				ok = (num_first > 0) && (num_first <= c.size()) && (num_last > num_first) && (num_last <= c.size());
+				ok = (num_first > 0) && (num_first <= c.size()) && (num_first <= num_last) && (num_last <= c.size());
 				if (!ok) {
 					std::cout << "Ошибка! Повторите ввод:\n";
 				}
@@ -357,7 +358,7 @@ void doMenuActions(){
 				outputContainer(c);
 			}
 			else
-				std::cout << "Контейнера пуст." << std::endl;
+				std::cout << "Контейнер пуст." << std::endl;
 		}
 	}
 }
