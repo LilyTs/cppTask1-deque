@@ -35,7 +35,7 @@ std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) 
 	f.close();
 	return f;
 }
-//разберется с лямбдой
+
 //Заполнение контейнера случайными числами из диапазона [-M, M]
 container& fillContainerWithRandNumbers(container &c, int N, int M) {
 	c.resize(N);
@@ -52,18 +52,6 @@ std::fstream& fillFileFromContainer(std::string fileName, container &c) {
 	return f;
 }
 
-//Заполнение контейнера значениями из файла
-/*void fillContainerFromFile(std::ifstream &f, container &c) {
-	c.clear();
-	if(f.is_open()) {
-		std::copy(
-		std::istream_iterator<value_type>(f),
-		std::istream_iterator<value_type>(),
-		std::back_inserter<container>(c));
-	}
-}*/
-
-//тоже будет разбираться
 int fillContainerFromFile(std::string fileName, container &c) {
 	c.clear();
 	std::fstream f(fileName, std::ios_base::in);
@@ -80,7 +68,7 @@ int fillContainerFromFile(std::string fileName, container &c) {
 }
 
 //Вывод элементов контейнера на экран
-void outputContainer(container &c) {
+void printContainer(container &c) {
 	for (cIterator it = c.begin(); it != c.end(); ++it) {
 		std::cout << *it << " ";
 	}
@@ -104,28 +92,18 @@ double halfsumOfMinAndMax(cIterator first, cIterator last) {
 	return ((min + max) / 2);
 }
 
-//-------------------------------------------------
-//!!!!!!!!запустить и попробовать поработать с пустым файлом!!!!!!!!!!!!!
-//проверка на пустоту first != last и нужна ли она вообще?
-//--------------------------------------------------------------
-
 //Преобразование контейнера (15. Добавить к каждому числу полусумму минимального и максимального по абсолютной величине числа.)
-int modify(container &c) {
+void modify(container &c) {
 	double hs = halfsumOfMinAndMax(c.begin(), c.end());
-	if (!c.empty()) {
 		for (cIterator it = c.begin(); it != c.end(); ++it) {
 			(*it) += hs;
 		}
-		return 0;
-	}
-	return -1;
 }
 
-//контейнер не нужен, проверка (нужна ли? можно работать с пустым контейнером) через итераторы
 //Преобразование выбранной части контейнера
-int modify(cIterator first, cIterator last, container &c) {
+int modify(cIterator first, cIterator last) {
 	double hs = halfsumOfMinAndMax(first, last);
-	if (!c.empty()) {
+	if (first != last) {
 		for (cIterator it = first; it != last; ++it) {
 			*it += hs;
 		}
@@ -156,22 +134,14 @@ private:
 	double a;
 };
 
-int transform(container &c) {
-	if (!c.empty()) {
+void transform(container &c) {
 		double hs = halfsumOfMinAndMax(c.begin(), c.end());
 		std::transform(c.begin(), c.end(), c.begin(), addNumber(hs));
-		return 0;
-	}
-	return -1;
 }
 
-int modify_for_each(container &c) {
-	if (!c.empty()) {
+void modify_for_each(container &c) {
 		double hs = halfsumOfMinAndMax(c.begin(), c.end());
 		std::for_each(c.begin(), c.end(), addNumber_for_each(hs));
-		return 0;
-	}
-	return -1;
 }
 
 value_type sum(container &c) {
@@ -234,6 +204,17 @@ void inputFileName(std::string &fileName) {
 	std::cin >> fileName;
 }
 
+int outputContainerToConsole(container &c) {
+	if (!c.empty()) {
+		std::cout << "Контенер: ";
+		printContainer(c);
+		return 0;
+	}
+	else
+		std::cout << "Контейнер пуст." << std::endl;
+	return -1;
+}
+
 void doMenuActions(){
 	int item;
 	container c;
@@ -264,98 +245,76 @@ void doMenuActions(){
 		case 4:
 			inputFileName(fileName);
 			if (fillContainerFromFile(fileName, c) == 0) {
-				std::cout << "Контейнер: ";
-				outputContainer(c);
+				outputContainerToConsole(c);
 			}
 			else {
 				std::cout << "Не удалось открыть файл.";
 			}
 			break;
 		case 5:
-			std::cout << "Исходный контейнер:\n";
-			outputContainer(c);
-			if (modify(c) == 0) {
+			if (outputContainerToConsole(c) == 0) {
 				std::cout << "Преобразованный контейнер:\n";
-				outputContainer(c);
-			}
-			else {
-				std::cout << "Невозможно выполнить преобразование." << std::endl;
+				modify(c);
+				printContainer(c);
 			}
 			break;
 		case 6: {
 			cIterator first, last;
 			int num_first, num_last;
 			bool ok;
+			if (outputContainerToConsole(c) == 0) {
+				std::cout << "Введите, с какого по какой элемент (включительно) требуется выполнить преобразование:\n";
+				do {
+					std::cout << "c ";
+					std::cin >> num_first;
+					std::cout << "по ";
+					std::cin >> num_last;
+					ok = (num_first > 0) && (num_first <= c.size()) && (num_first <= num_last) && (num_last <= c.size());
+					if (!ok) {
+						std::cout << "Ошибка! Повторите ввод:\n";
+					}
+				} while (!ok);
+				std::cout << std::endl;
 
-			std::cout << "Введите, с какого по какой элемент (включительно) требуется выполнить преобразование:\n";
-			do {
-				std::cout << "c ";
-				std::cin >> num_first;
-				std::cout << "по ";
-				std::cin >> num_last;
-				ok = (num_first > 0) && (num_first <= c.size()) && (num_first <= num_last) && (num_last <= c.size());
-				if (!ok) {
-					std::cout << "Ошибка! Повторите ввод:\n";
-				}
-			} while (!ok);
-			std::cout << std::endl;
-			first = c.begin() + num_first - 1;
-			last = c.end() - (c.size() - num_last);
+				first = c.begin() + num_first - 1;
+				last = c.end() - (c.size() - num_last);
 
-			std::cout << "\nИсходный контейнер:\n";
-			outputContainer(c);
-			if (modify(first, last, c) == 0) {
+				modify(first, last);
 				std::cout << "Преобразованный контейнер:\n";
-				outputContainer(c);
+				printContainer(c);
 			}
-			else {
-				std::cout << "Невозможно выполнить преобразование." << std::endl;
-			}
-		}
 			break;
+		}
 		case 7:
-			std::cout << "Исходный контейнер:\n";
-			outputContainer(c);
-			if (transform(c) == 0) {
+			if (outputContainerToConsole(c) == 0) {
+				transform(c);
 				std::cout << "Преобразованный контейнер:\n";
-				outputContainer(c);
-			}
-			else {
-				std::cout << "Невозможно выполнить преобразование." << std::endl;
+				printContainer(c);
 			}
 			break;
 		case 8:
-			std::cout << "Исходный контейнер:\n";
-			outputContainer(c);
-			if (modify_for_each(c) == 0) {
+			if (outputContainerToConsole(c) == 0) {
+				modify_for_each(c);
 				std::cout << "Преобразованный контейнер:\n";
-				outputContainer(c);
-			}
-			else {
-				std::cout << "Невозможно выполнить преобразование." << std::endl;
+				printContainer(c);
 			}
 			break;
 		case 9:
-			std::cout << "Контенер: ";
-			outputContainer(c);
-			std::cout << "Сумма элементов контейнера: " << sum(c) << std::endl;
+			if (outputContainerToConsole(c) == 0) {
+				std::cout << "Сумма элементов контейнера: " << sum(c) << std::endl;
+			}
 			break;
 		case 10:
-			std::cout << "Контенер: ";
-			outputContainer(c);
-			std::cout << "Среднее арифметическое элементов контейнера: " << average(c) << std::endl;
+			if (outputContainerToConsole(c) == 0) {
+				std::cout << "Среднее арифметическое элементов контейнера: " << average(c) << std::endl;
+			}
 			break;
 		case 11:
 			inputFileName(fileName);
 			fillFileFromContainer(fileName, c);
 			break;
 		case 12:
-			if (!c.empty()) {
-				std::cout << "Контенер: ";
-				outputContainer(c);
-			}
-			else
-				std::cout << "Контейнер пуст." << std::endl;
+			outputContainerToConsole(c);
 		}
 	}
 }
