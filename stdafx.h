@@ -15,9 +15,6 @@
 #include <sstream>
 #include <algorithm>
 #include <fstream>
-typedef double value_type;
-typedef std::deque<value_type> container;
-typedef container::iterator cIterator;
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

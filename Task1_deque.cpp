@@ -20,10 +20,14 @@
 
 #include "stdafx.h"
 
+typedef double value_type;
+typedef std::deque<value_type> container;
+typedef container::iterator cIterator;
+
 //√енератор случайного целого числа из диапазона [-M, M]
 int rand(int M) {
 	if(M != 0)
-		return std::rand() % (2 * M) + (-M);
+		return std::rand() % (2 * M + 1) + (-M);
 	return 0;
 }
 
@@ -39,7 +43,7 @@ std::fstream& fillFileWithRandNumbers_cycle(std::string fileName, int N, int M) 
 //«аполнение контейнера случайными числами из диапазона [-M, M]
 container& fillContainerWithRandNumbers(container &c, int N, int M) {
 	c.resize(N);
-	std::generate(c.begin(), c.end(), [&]() {return (value_type)rand(M); });
+	std::generate(c.begin(), c.end(), [M]() {return (value_type)rand(M); });
 	return c;
 }
 
@@ -95,29 +99,24 @@ double halfsumOfMinAndMax(cIterator first, cIterator last) {
 //ѕреобразование контейнера (15. ƒобавить к каждому числу полусумму минимального и максимального по абсолютной величине числа.)
 void modify(container &c) {
 	double hs = halfsumOfMinAndMax(c.begin(), c.end());
-		for (cIterator it = c.begin(); it != c.end(); ++it) {
-			(*it) += hs;
-		}
+	for (cIterator it = c.begin(); it != c.end(); ++it) {
+		(*it) += hs;
+	}
 }
 
 //ѕреобразование выбранной части контейнера
-int modify(cIterator first, cIterator last) {
+void modify(cIterator first, cIterator last) {
 	double hs = halfsumOfMinAndMax(first, last);
-	if (first != last) {
-		for (cIterator it = first; it != last; ++it) {
-			*it += hs;
-		}
-		return 0;
+	for (cIterator it = first; it != last; ++it) {
+		*it += hs;
 	}
-	return -1;
 }
 
-//не нужна передача по ссылке!
 //функтор (прибавл€ет некоторое число b)
 class addNumber {
 public:
 	explicit addNumber(double b) : a(b) {}
-	double operator()( value_type &el) const {
+	double operator()( value_type el) const {
 		return el + a;
 	}
 private:
@@ -195,7 +194,7 @@ void inputNM(int &N, int &M) {
 	} while (N < 0);
 	std::cout << "\n¬ведите границу диапазона M: ";
 	std::cin >> M;
-	if (M < 0) M = abs(M);
+	M = abs(M);
 	std::cout << std::endl;
 } 
 
